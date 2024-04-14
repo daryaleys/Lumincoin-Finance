@@ -2,40 +2,59 @@ import {Main} from "./components/main";
 import {IncomeAndExpenses} from "./components/income-and-expenses";
 import {Income} from "./components/income";
 import {Expenses} from "./components/expenses";
+import {Login} from "./components/login";
+import {Register} from "./components/register";
 
 export class Router {
     constructor() {
-        this.activateNewItem();
-
         this.contentPageElement = document.getElementById('content');
         this.initEvents();
+
         this.routes = [
             {
                 route: '/',
-                filePathTemplate: '/pages/main.html',
+                filePathTemplate: '/pages/templates/main.html',
+                useLayout: '/pages/layout.html',
                 load: () => {
                     new Main();
                 }
             },
             {
                 route: '/income-and-expenses',
-                filePathTemplate: '/pages/income-and-expenses.html',
+                filePathTemplate: '/pages/templates/income-and-expenses.html',
+                useLayout: '/pages/layout.html',
                 load: () => {
                     new IncomeAndExpenses();
                 }
             },
             {
                 route: '/income',
-                filePathTemplate: '/pages/income.html',
+                filePathTemplate: '/pages/templates/income.html',
+                useLayout: '/pages/layout.html',
                 load: () => {
                     new Income();
                 }
             },
             {
                 route: '/expenses',
-                filePathTemplate: '/pages/expenses.html',
+                filePathTemplate: '/pages/templates/expenses.html',
+                useLayout: '/pages/layout.html',
                 load: () => {
                     new Expenses();
+                }
+            },
+            {
+                route: '/login',
+                filePathTemplate: '/pages/templates/login.html',
+                load: () => {
+                    new Login();
+                }
+            },
+            {
+                route: '/register',
+                filePathTemplate: '/pages/templates/register.html',
+                load: () => {
+                    new Register();
                 }
             },
         ]
@@ -52,7 +71,16 @@ export class Router {
 
         if (currentUrl) {
             if (currentUrl.filePathTemplate) {
-                this.contentPageElement.innerHTML = await fetch(currentUrl.filePathTemplate).then(response => response.text());
+
+                let contentBlock = this.contentPageElement;
+
+                if (currentUrl.useLayout) {
+                    this.contentPageElement.innerHTML = await fetch(currentUrl.useLayout).then(response => response.text());
+                    contentBlock = document.getElementById('layout-content');
+                    this.menuClickHandle(currentUrl);
+                }
+
+                contentBlock.innerHTML = await fetch(currentUrl.filePathTemplate).then(response => response.text());
             }
 
             if (currentUrl.load) {
@@ -64,19 +92,7 @@ export class Router {
         }
     }
 
-    activateNewItem() {
-        const clearItems = (items) => {
-            items.forEach(oldItem => {
-                oldItem.classList.remove('active');
-                oldItem.classList.add('link-dark');
-            })
-        }
-
-        const toggleItemClasses = (item) => {
-            item.classList.toggle('active');
-            item.classList.toggle('link-dark');
-        }
-
+    menuClickHandle(currentUrl) {
         const menuCollapsibleWrapper = document.querySelector('#collapsible-menu-wrapper');
         const menuCollapsible = document.querySelector('#collapsible-menu');
         const menuCollapsibleButton = document.querySelector('.nav-link-button');
@@ -86,29 +102,32 @@ export class Router {
         }
         menuCollapsibleButton.addEventListener('click', toggleMenu);
 
-        const menuItems = document.querySelectorAll('.sidebar .nav-link-item');
-        menuItems.forEach(item => item.addEventListener('click', async (e) => {
-            e.preventDefault();
+        document.querySelectorAll('.sidebar .nav-link-item').forEach(item => {
+            const href = item.getAttribute('href');
 
-            history.pushState({}, '', item.getAttribute('href'));
-            await this.activateRoute();
-
-            clearItems(menuItems);
-            toggleItemClasses(item);
-
-            if (item.classList.contains('collapsible')) {
-                menuCollapsibleWrapper.classList.add('border', 'border-primary');
-                menuCollapsibleButton.classList.add('active', 'rounded-0');
-                menuCollapsibleButton.classList.remove('link-dark');
-
+            if ((currentUrl.route.includes(href) && href !== '/' && href !== '/income') || (currentUrl.route === '/' && href === '/') || (currentUrl.route === '/income' && href === '/income')) {
+                item.classList.add('active');
+                item.classList.remove('link-dark');
+                if (item.classList.contains('collapsible')) {
+                    menuCollapsibleWrapper.classList.add('border', 'border-primary');
+                    menuCollapsibleButton.classList.add('active', 'rounded-0');
+                    menuCollapsibleButton.classList.remove('link-dark');
+                    if (!menuCollapsibleButton.classList.contains('expanded')) {
+                        toggleMenu()
+                    }
+                }
             } else {
-                menuCollapsibleWrapper.classList.remove('border', 'border-primary');
-                menuCollapsibleButton.classList.remove('rounded-0', 'active');
-                menuCollapsibleButton.classList.add('link-dark');
-                if (menuCollapsibleButton.classList.contains('expanded')) {
-                    toggleMenu()
+                item.classList.remove('active');
+                item.classList.add('link-dark');
+                if (!item.classList.contains('collapsible')) {
+                    menuCollapsibleWrapper.classList.remove('border', 'border-primary');
+                    menuCollapsibleButton.classList.remove('rounded-0', 'active');
+                    menuCollapsibleButton.classList.add('link-dark');
+                    if (menuCollapsibleButton.classList.contains('expanded')) {
+                        toggleMenu()
+                    }
                 }
             }
-        }))
+        });
     }
 }
