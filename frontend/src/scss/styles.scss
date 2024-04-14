@@ -1,0 +1,29 @@
+@import "~bootstrap/scss/bootstrap";
+
+.nav-link {
+  font-size: 14px;
+}
+
+.username-bg {
+  background: #d9d9d9;
+}
+
+.sidebar {
+  .nav-link-button {
+    svg {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    &.active {
+      svg path {
+        fill: #fff;
+      }
+    }
+
+    &.expanded {
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+  }
+}
