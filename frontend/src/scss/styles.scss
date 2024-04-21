@@ -28,13 +28,17 @@
   }
 }
 
-.signin-form {
+.form-signin, .form-signup {
   .form-check {
     .form-check-label {
       font-size: 12px;
     }
   }
+  .input-group-text {
+    width: 38px;
+  }
   .form-link {
     font-size: 12px;
   }
+
 }

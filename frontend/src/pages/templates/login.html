@@ -1,10 +1,10 @@
-<main class="form-signin vh-100 vw-100 d-flex">
-    <form class="signin-form w-25 m-auto">
+<div class="form-signin vh-100 vw-100 d-flex">
+    <form class="w-25 m-auto">
         <div class="d-flex flex-column">
             <img width="171" height="70" src="./assets/Logo.png" class="fs-4 align-self-center mb-5">
             <h1 class="h3 mb-4 fw-medium text-primary-emphasis text-center fs-1">Вход</h1>
 
-            <div class="input-group border border-1 mb-2 rounded-2 overflow-hidden">
+            <div class="input-group has-validation rounded-2 overflow-hidden">
                 <div class="input-group-addon">
                     <div class="input-group-text h-100 rounded-end-0 bg-body-secondary">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,11 +15,13 @@
                     </div>
                 </div>
                 <input id="email" type="email" class="form-control bg-body-tertiary" name="email" placeholder="Электронная почта">
+                <div class="invalid-feedback">
+                    Введите e-mail
+                </div>
             </div>
 
-
-            <div class="input-group mb-2 border border-1 rounded-2 overflow-hidden">
-                <div class="input-group-addon  ">
+            <div class="input-group is-invalid has-validation mt-2 rounded-2 overflow-hidden">
+                <div class="input-group-addon">
                     <div class="input-group-text h-100 rounded-end-0 bg-body-secondary">
                         <svg width="13" height="16" viewBox="0 0 13 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -29,9 +31,12 @@
                     </div>
                 </div>
                 <input id="password" type="password" class="form-control bg-body-tertiary" name="password" placeholder="Пароль">
+                <div class="invalid-feedback">
+                    Введите пароль
+                </div>
             </div>
 
-            <div class="form-check text-start mb-4 d-flex align-items-end gap-2">
+            <div class="form-check text-start mt-2 mb-4 d-flex align-items-end gap-2">
                 <input class="form-check-input align-self-center border border-1" type="checkbox" value="remember-me" id="flexCheckDefault">
                 <label class="form-check-label" for="flexCheckDefault">
                     Запомнить меня
@@ -41,4 +46,4 @@
             <p class="form-link text-black">Ещё нет аккаунта? <a class="ms-2" href="/register">Пройдите регистрацию</a></p>
         </div>
     </form>
-</main>
+</div>
