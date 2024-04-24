@@ -1,7 +1,11 @@
 import {Main} from "./components/main";
 import {IncomeAndExpenses} from "./components/income-and-expenses";
 import {Income} from "./components/income";
+import {IncomeCreate} from "./components/income-create";
+import {IncomeEdit} from "./components/income-edit";
 import {Expenses} from "./components/expenses";
+import {ExpensesCreate} from "./components/expenses-create";
+import {ExpensesEdit} from "./components/expenses-edit";
 import {Login} from "./components/login";
 import {Register} from "./components/register";
 
@@ -36,11 +40,43 @@ export class Router {
                 }
             },
             {
+                route: '/income-create',
+                filePathTemplate: '/pages/templates/income-create.html',
+                useLayout: '/pages/layout.html',
+                load: () => {
+                    new IncomeCreate();
+                }
+            },
+            {
+                route: '/income-edit',
+                filePathTemplate: '/pages/templates/income-edit.html',
+                useLayout: '/pages/layout.html',
+                load: () => {
+                    new IncomeEdit();
+                }
+            },
+            {
                 route: '/expenses',
                 filePathTemplate: '/pages/templates/expenses.html',
                 useLayout: '/pages/layout.html',
                 load: () => {
                     new Expenses();
+                }
+            },
+            {
+                route: '/expenses-create',
+                filePathTemplate: '/pages/templates/expenses-create.html',
+                useLayout: '/pages/layout.html',
+                load: () => {
+                    new ExpensesCreate();
+                }
+            },
+            {
+                route: '/expenses-edit',
+                filePathTemplate: '/pages/templates/expenses-edit.html',
+                useLayout: '/pages/layout.html',
+                load: () => {
+                    new ExpensesEdit();
                 }
             },
             {
