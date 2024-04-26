@@ -8,6 +8,9 @@
     "vite": "^5.2.8"
   },
   "devDependencies": {
+    "bootstrap-datepicker": "^1.10.0",
+    "jquery": "^3.7.1",
+    "moment-with-locales-es6": "^1.0.1",
     "sass": "^1.75.0"
   }
 }

@@ -5,6 +5,7 @@ export default {
     resolve: {
         alias: {
             '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+            '~datepicker': path.resolve(__dirname, 'node_modules/bootstrap-datepicker'),
         }
     },
     server: {

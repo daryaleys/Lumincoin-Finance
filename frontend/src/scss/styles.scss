@@ -1,4 +1,5 @@
 @import "~bootstrap/scss/bootstrap";
+@import "~datepicker/dist/css/bootstrap-datepicker.css";
 
 .nav-link {
   font-size: 14px;
@@ -28,7 +29,8 @@
   }
 }
 
-.form-signin, .form-signup {
+.form-signin,
+.form-signup {
   .form-check {
     .form-check-label {
       font-size: 12px;
@@ -45,5 +47,23 @@
 .add-card {
   font-size: 28px;
   font-weight: 700;
-  color: #CED4DA;
+  color: #ced4da;
+}
+
+table.table,
+table.table tr,
+table.table tr th,
+table.table tr td {
+  background: transparent;
+}
+
+.datepicker,
+.table-condensed {
+  width: 300px;
+}
+
+#startDate,
+#endDate {
+  width: 85px;
+  cursor: pointer;
 }
