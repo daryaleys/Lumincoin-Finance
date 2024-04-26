@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "bootstrap-datepicker": "^1.10.0",
+    "chart.js": "^4.4.2",
     "jquery": "^3.7.1",
     "moment-with-locales-es6": "^1.0.1",
     "sass": "^1.75.0"
