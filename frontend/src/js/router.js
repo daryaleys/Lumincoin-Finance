@@ -8,8 +8,9 @@ import {IncomeEdit} from "./components/income-edit";
 import {Expenses} from "./components/expenses";
 import {ExpensesCreate} from "./components/expenses-create";
 import {ExpensesEdit} from "./components/expenses-edit";
-import {Login} from "./components/login";
-import {Register} from "./components/register";
+import {Login} from "./components/auth/login";
+import {Register} from "./components/auth/register";
+import {Logout} from "./components/auth/logout";
 import {UserInfo} from "./helpers/userInfo";
 
 export class Router {
@@ -124,6 +125,12 @@ export class Router {
                     new Register(this.openNewRoute.bind(this));
                 },
             },
+            {
+                route: "/logout",
+                load: () => {
+                    new Logout(this.openNewRoute.bind(this));
+                },
+            },
         ];
     }
 
@@ -145,7 +152,7 @@ export class Router {
         } else {
             element = e.target.parentNode;
         }
-        if (!element || !element.href) return
+        if (!element || !element.href || element.href === '/#') return
 
         e.preventDefault();
         const newRoute = element.href.replace(window.location.origin, '');

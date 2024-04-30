@@ -24,4 +24,14 @@ export class Requests {
 
         return await response.json();
     }
+
+    static async logout(body) {
+        const response = await fetch(this.host + '/logout', {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(body)
+        })
+
+        return await response.json();
+    }
 }

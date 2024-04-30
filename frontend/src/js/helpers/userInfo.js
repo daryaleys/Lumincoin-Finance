@@ -12,4 +12,10 @@ export class UserInfo {
             userInfo: localStorage.getItem('userInfo')
         }
     }
+
+    static removeUserInfo() {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userInfo');
+    }
 }

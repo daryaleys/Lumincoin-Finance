@@ -1,5 +1,5 @@
-import {Requests} from "../helpers/requests";
-import {UserInfo} from "../helpers/userInfo";
+import {Requests} from "../../helpers/requests";
+import {UserInfo} from "../../helpers/userInfo";
 
 export class Login {
     constructor(openNewRoute) {
