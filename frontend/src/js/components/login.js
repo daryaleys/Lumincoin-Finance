@@ -1,5 +1,9 @@
+import {Requests} from "../helpers/requests";
+
 export class Login {
-    constructor() {
+    constructor(openNewRoute) {
+        this.openNewRoute = openNewRoute;
+
         this.emailElement = document.getElementById("email");
         this.passwordElement = document.getElementById("password");
         this.rememberMeElement = document.getElementById("remember-me");
@@ -31,34 +35,27 @@ export class Login {
     async login() {
         this.commonErrorElement.style.display = 'none';
 
-        if (this.validateForm()) {
-            const response = await fetch('http://localhost:3000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: this.emailElement.value,
-                    password: this.passwordElement.value,
-                    rememberMe: this.rememberMeElement.checked
-                })
-            })
+        // if (this.validateForm()) {
+        //     const body = {
+        //         email: this.emailElement.value,
+        //         password: this.passwordElement.value,
+        //         rememberMe: this.rememberMeElement.checked
+        //     }
 
-            const result = await response.json();
+            console.log(this.rememberMeElement)
 
-            if (result.error || !result.accessToken || !result.refreshToken || !result.id || !result.name) {
-                this.commonErrorElement.style.display = 'block';
-                return;
-            }
+                // const result = await Requests.login(body);
 
-            localStorage.setItem('accessToken', result.accessToken);
-            localStorage.setItem('refreshToken', result.refreshToken);
-            localStorage.setItem('userInfo', JSON.stringify({id: result.id, name: result.name}));
+            // if (result.error || !result.tokens || !result.user) {
+            //     this.commonErrorElement.style.display = 'block';
+            //     return
+            // }
 
-            window.location.href = '/';
+            // localStorage.setItem('accessToken', result.tokens.accessToken);
+            // localStorage.setItem('refreshToken', result.tokens.refreshToken);
+            // localStorage.setItem('userInfo', JSON.stringify({id: result.user.id, name: result.user.name, lastName: result.user.lastName}));
 
-            console.log(result)
-        }
+            // this.openNewRoute('/');
+        // }
     }
 }

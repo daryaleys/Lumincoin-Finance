@@ -101,14 +101,14 @@ export class Router {
                 route: "/login",
                 filePathTemplate: "/pages/templates/login.html",
                 load: () => {
-                    new Login();
+                    new Login(this.openNewRoute.bind(this));
                 },
             },
             {
                 route: "/register",
                 filePathTemplate: "/pages/templates/register.html",
                 load: () => {
-                    new Register();
+                    new Register(this.openNewRoute.bind(this));
                 },
             },
         ];
