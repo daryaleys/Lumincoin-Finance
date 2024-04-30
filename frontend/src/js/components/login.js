@@ -35,27 +35,25 @@ export class Login {
     async login() {
         this.commonErrorElement.style.display = 'none';
 
-        // if (this.validateForm()) {
-        //     const body = {
-        //         email: this.emailElement.value,
-        //         password: this.passwordElement.value,
-        //         rememberMe: this.rememberMeElement.checked
-        //     }
+        if (this.validateForm()) {
+            const body = {
+                email: this.emailElement.value,
+                password: this.passwordElement.value,
+                rememberMe: this.rememberMeElement.checked
+            }
 
-            console.log(this.rememberMeElement)
+            const result = await Requests.login(body);
 
-                // const result = await Requests.login(body);
+            if (result.error || !result.tokens || !result.user) {
+                this.commonErrorElement.style.display = 'block';
+                return
+            }
 
-            // if (result.error || !result.tokens || !result.user) {
-            //     this.commonErrorElement.style.display = 'block';
-            //     return
-            // }
+            localStorage.setItem('accessToken', result.tokens.accessToken);
+            localStorage.setItem('refreshToken', result.tokens.refreshToken);
+            localStorage.setItem('userInfo', JSON.stringify({id: result.user.id, name: result.user.name, lastName: result.user.lastName}));
 
-            // localStorage.setItem('accessToken', result.tokens.accessToken);
-            // localStorage.setItem('refreshToken', result.tokens.refreshToken);
-            // localStorage.setItem('userInfo', JSON.stringify({id: result.user.id, name: result.user.name, lastName: result.user.lastName}));
-
-            // this.openNewRoute('/');
-        // }
+            this.openNewRoute('/');
+        }
     }
 }

@@ -126,7 +126,7 @@ export class Router {
     }
 
     async linksHandle(e) {
-        e.preventDefault();
+
 
         let element = null;
         if (e.target.nodeName === 'A') {
@@ -136,6 +136,7 @@ export class Router {
         }
         if (!element || !element.href) return
 
+        e.preventDefault();
         const newRoute = element.href.replace(window.location.origin, '');
         await this.openNewRoute(newRoute);
     }

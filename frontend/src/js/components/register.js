@@ -1,3 +1,5 @@
+import {Requests} from "../helpers/requests";
+
 export class Register {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
@@ -55,39 +57,42 @@ export class Register {
         this.commonErrorElement.style.display = "none";
 
         if (this.validateForm()) {
-            const response = await fetch('http://localhost:3000/api/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: this.nameInputElement.value,
-                    lastName: this.lastNameInputElement.value,
-                    email: this.emailInputElement.value,
-                    password: this.passwordInputElement.value,
-                    passwordRepeat: this.repeatPasswordInputElement.value
-                })
-            })
+            const registerBody = {
+                name: this.nameInputElement.value,
+                lastName: this.lastNameInputElement.value,
+                email: this.emailInputElement.value,
+                password: this.passwordInputElement.value,
+                passwordRepeat: this.repeatPasswordInputElement.value
+            }
 
-            const result = await response.json();
+            const result = await Requests.register(registerBody);
 
             if (result.error || !result.user) {
                 this.commonErrorElement.style.display = 'block';
-
-                if (response.status === 400 && result.message === "User with given email already exist") {
+                if (result.message === "User with given email already exist") {
                     this.commonErrorElement.innerText = "Пользователь с таким email уже зарегистрирован";
                 }
-
                 return;
             }
 
+            const loginBody = {
+                email: this.emailInputElement.value,
+                password: this.passwordInputElement.value,
+                rememberMe: false
+            }
 
+            const result2 = await Requests.login(loginBody);
 
-            localStorage.setItem('userInfo', JSON.stringify({id: result.user.id, name: result.user.name, lastName: result.user.lastName}));
+            if (result2.error || !result2.tokens || !result2.user) {
+                this.commonErrorElement.style.display = 'block';
+                return
+            }
 
+            localStorage.setItem('accessToken', result2.tokens.accessToken);
+            localStorage.setItem('refreshToken', result2.tokens.refreshToken);
+            localStorage.setItem('userInfo', JSON.stringify({id: result2.user.id, name: result2.user.name, lastName: result2.user.lastName}));
 
-            // this.openNewRoute('/');
+            this.openNewRoute('/');
         }
     }
 }
