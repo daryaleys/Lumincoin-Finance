@@ -10,6 +10,7 @@ import {ExpensesCreate} from "./components/expenses-create";
 import {ExpensesEdit} from "./components/expenses-edit";
 import {Login} from "./components/login";
 import {Register} from "./components/register";
+import {UserInfo} from "./helpers/userInfo";
 
 export class Router {
     constructor() {
@@ -21,6 +22,7 @@ export class Router {
                 route: "/",
                 filePathTemplate: "/pages/templates/main.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new Main();
                 },
@@ -29,6 +31,7 @@ export class Router {
                 route: "/income-and-expenses",
                 filePathTemplate: "/pages/templates/income-and-expenses.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new IncomeAndExpenses();
                 },
@@ -37,6 +40,7 @@ export class Router {
                 route: "/income-expense-add",
                 filePathTemplate: "/pages/templates/income-expense-add.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new IncomeExpenseAdd();
                 },
@@ -45,6 +49,7 @@ export class Router {
                 route: "/income-expense-edit",
                 filePathTemplate: "/pages/templates/income-expense-edit.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new IncomeExpenseEdit();
                 },
@@ -53,6 +58,7 @@ export class Router {
                 route: "/income",
                 filePathTemplate: "/pages/templates/income.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new Income();
                 },
@@ -61,6 +67,7 @@ export class Router {
                 route: "/income-create",
                 filePathTemplate: "/pages/templates/income-create.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new IncomeCreate();
                 },
@@ -69,6 +76,7 @@ export class Router {
                 route: "/income-edit",
                 filePathTemplate: "/pages/templates/income-edit.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new IncomeEdit();
                 },
@@ -77,6 +85,7 @@ export class Router {
                 route: "/expenses",
                 filePathTemplate: "/pages/templates/expenses.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new Expenses();
                 },
@@ -85,6 +94,7 @@ export class Router {
                 route: "/expenses-create",
                 filePathTemplate: "/pages/templates/expenses-create.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new ExpensesCreate();
                 },
@@ -93,6 +103,7 @@ export class Router {
                 route: "/expenses-edit",
                 filePathTemplate: "/pages/templates/expenses-edit.html",
                 useLayout: "/pages/layout.html",
+                needAuth: true,
                 load: () => {
                     new ExpensesEdit();
                 },
@@ -100,6 +111,7 @@ export class Router {
             {
                 route: "/login",
                 filePathTemplate: "/pages/templates/login.html",
+                needAuth: false,
                 load: () => {
                     new Login(this.openNewRoute.bind(this));
                 },
@@ -107,6 +119,7 @@ export class Router {
             {
                 route: "/register",
                 filePathTemplate: "/pages/templates/register.html",
+                needAuth: false,
                 load: () => {
                     new Register(this.openNewRoute.bind(this));
                 },
@@ -126,8 +139,6 @@ export class Router {
     }
 
     async linksHandle(e) {
-
-
         let element = null;
         if (e.target.nodeName === 'A') {
             element = e.target;
@@ -144,17 +155,22 @@ export class Router {
     async activateRoute() {
         const url = window.location.pathname;
         const currentUrl = this.routes.find((item) => item.route === url);
+        const isAuthed = UserInfo.getUserInfo().accessToken;
 
         if (currentUrl) {
             if (currentUrl.filePathTemplate) {
                 let contentBlock = this.contentPageElement;
 
                 if (currentUrl.useLayout) {
-                    this.contentPageElement.innerHTML = await fetch(
-                        currentUrl.useLayout
-                    ).then((response) => response.text());
-                    contentBlock = document.getElementById("layout-content");
-                    this.activateSidebarButtons(currentUrl);
+                    if (isAuthed) {
+                        this.contentPageElement.innerHTML = await fetch(
+                            currentUrl.useLayout
+                        ).then((response) => response.text());
+                        contentBlock = document.getElementById("layout-content");
+                        this.activateSidebarButtons(currentUrl);
+                    } else {
+                        return await this.openNewRoute('/login')
+                    }
                 }
 
                 contentBlock.innerHTML = await fetch(currentUrl.filePathTemplate).then(

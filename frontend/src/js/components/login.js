@@ -1,8 +1,13 @@
 import {Requests} from "../helpers/requests";
+import {UserInfo} from "../helpers/userInfo";
 
 export class Login {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
+
+        if (UserInfo.getUserInfo().accessToken) {
+            return this.openNewRoute('/')
+        }
 
         this.emailElement = document.getElementById("email");
         this.passwordElement = document.getElementById("password");
@@ -49,10 +54,7 @@ export class Login {
                 return
             }
 
-            localStorage.setItem('accessToken', result.tokens.accessToken);
-            localStorage.setItem('refreshToken', result.tokens.refreshToken);
-            localStorage.setItem('userInfo', JSON.stringify({id: result.user.id, name: result.user.name, lastName: result.user.lastName}));
-
+            UserInfo.setUserInfo(result.tokens.accessToken, result.tokens.refreshToken, result.user.id, result.user.name, result.user.lastName);
             this.openNewRoute('/');
         }
     }

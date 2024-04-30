@@ -1,8 +1,13 @@
 import {Requests} from "../helpers/requests";
+import {UserInfo} from "../helpers/userInfo";
 
 export class Register {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
+
+        if (UserInfo.getUserInfo().accessToken) {
+            return this.openNewRoute('/')
+        }
 
         this.nameInputElement = document.getElementById("name");
         this.lastNameInputElement = document.getElementById("last-name");
@@ -88,9 +93,7 @@ export class Register {
                 return
             }
 
-            localStorage.setItem('accessToken', result2.tokens.accessToken);
-            localStorage.setItem('refreshToken', result2.tokens.refreshToken);
-            localStorage.setItem('userInfo', JSON.stringify({id: result2.user.id, name: result2.user.name, lastName: result2.user.lastName}));
+            UserInfo.setUserInfo(result2.tokens.accessToken, result2.tokens.refreshToken, result2.user.id, result2.user.name, result2.user.lastName);
 
             this.openNewRoute('/');
         }
