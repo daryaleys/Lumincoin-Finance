@@ -12,6 +12,7 @@ import {Login} from "./components/auth/login";
 import {Register} from "./components/auth/register";
 import {Logout} from "./components/auth/logout";
 import {UserInfo} from "./helpers/userInfo";
+import {Requests} from "./helpers/requests";
 
 export class Router {
     constructor() {
@@ -175,6 +176,7 @@ export class Router {
                         ).then((response) => response.text());
                         contentBlock = document.getElementById("layout-content");
                         this.activateSidebarButtons(currentUrl);
+                        await this.showUserInfo();
                     } else {
                         return await this.openNewRoute('/login')
                     }
@@ -245,5 +247,26 @@ export class Router {
                 }
             }
         });
+    }
+
+    async showUserInfo() {
+        const balanceResult = await Requests.getBalance();
+        if (balanceResult.redirect) {
+            return await this.openNewRoute(balanceResult.redirect);
+        }
+        if (balanceResult.error) {
+            return alert('Возникла ошибка при запросе баланса. Обратитесь в поддержку')
+        }
+
+        this.balanceElement = document.getElementById("balance");
+        if (this.balanceElement) {
+            this.balanceElement.innerText = balanceResult.balance.toString() + '$';
+        }
+
+        this.userNameElement = document.getElementById("layout-username");
+        const userInfo = JSON.parse(UserInfo.getUserInfo().userInfo);
+        if (this.userNameElement && userInfo) {
+            this.userNameElement.innerText = userInfo.name + ' ' + userInfo.lastName;
+        }
     }
 }
