@@ -144,6 +144,33 @@ export class Requests {
     return result;
   }
 
+  static async getCategory(categoryId) {
+    const response = await fetch(
+      this.host + "/categories/income/" + categoryId,
+      {
+        method: "GET",
+        headers: this.authHeaders,
+      }
+    );
+
+    const result = await response.json();
+    if (response.status === 401) {
+      const accessToken = UserInfo.getUserInfo().accessToken;
+      if (!accessToken) {
+        result.redirect = "/login";
+        return result;
+      } else {
+        const refreshResult = await this.refresh();
+        if (refreshResult.redirect) {
+          return refreshResult;
+        }
+        return await this.getCategory(categoryId);
+      }
+    }
+
+    return result;
+  }
+
   static async deleteCategory(categoryId) {
     const response = await fetch(
       this.host + "/categories/income/" + categoryId,

@@ -80,7 +80,7 @@ export class Router {
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new IncomeEdit();
+          new IncomeEdit(this.openNewRoute.bind(this));
         },
       },
       {
