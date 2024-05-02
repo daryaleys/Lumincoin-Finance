@@ -29,7 +29,6 @@ export class Income {
   }
 
   showCategories(categories) {
-    console.log(categories);
     categories.forEach((category) =>
       this.createCategoryCard(category.id, category.title)
     );
@@ -84,11 +83,16 @@ export class Income {
       "align-items-center",
       "py-2",
       "px-3",
-      "ms-2"
+      "ms-2",
+      "card-delete-category"
     );
     categoryDeleteButton.setAttribute("type", "button");
     categoryDeleteButton.setAttribute("data-bs-toggle", "modal");
     categoryDeleteButton.setAttribute("data-bs-target", "#modal");
+    categoryDeleteButton.addEventListener(
+      "click",
+      this.deleteCategory.bind(this)
+    );
     categoryDeleteButton.innerText = "Удалить";
 
     categoryCardBody.appendChild(categoryTitle);
@@ -96,8 +100,25 @@ export class Income {
     categoryCardBody.appendChild(categoryDeleteButton);
 
     this.categoryCardsList.insertBefore(category, this.appendCategoryButton);
-    console.log(category);
   }
 
-  deleteCategory() {}
+  deleteCategory(e) {
+    let categoryId = -1;
+    const cardElement = e.target.parentElement;
+    if (cardElement && cardElement.dataset.category) {
+      categoryId = cardElement.dataset.category;
+    }
+
+    this.deleteCategoryButton.onclick = async () => {
+      const result = await Requests.deleteCategory(categoryId);
+
+      if (result.error) {
+        return alert(
+          "Возникла ошибка при удалении категории. Пожалуйста, обратитесь в поддержку"
+        );
+      }
+
+      cardElement.parentElement.parentElement.remove();
+    };
+  }
 }
