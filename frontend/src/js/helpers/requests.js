@@ -71,20 +71,15 @@ export class Requests {
   }
 
   static async getBalance() {
-    const accessToken = UserInfo.getUserInfo().accessToken;
-    if (accessToken) {
-      this.headers["x-auth-token"] = accessToken;
-    }
-
     const response = await fetch(this.host + "/balance", {
       method: "GET",
-      headers: this.headers,
+      headers: this.authHeaders,
     });
 
     const result = await response.json();
 
     if (response.status === 401) {
-      // остальные ошибки обрабатываются на месте вызова функции
+      const accessToken = UserInfo.getUserInfo().accessToken;
       if (!accessToken) {
         result.redirect = "/login";
         return result;
@@ -100,6 +95,30 @@ export class Requests {
     return result;
   }
 
+  static async getCategories() {
+    const response = await fetch(this.host + "/categories/income", {
+      method: "GET",
+      headers: this.authHeaders,
+    });
+
+    const result = await response.json();
+    if (response.status === 401) {
+      const accessToken = UserInfo.getUserInfo().accessToken;
+      if (!accessToken) {
+        result.redirect = "/login";
+        return result;
+      } else {
+        const refreshResult = await this.refresh();
+        if (refreshResult.redirect) {
+          return refreshResult;
+        }
+        return await this.getCategories();
+      }
+    }
+
+    return result;
+  }
+
   static async createCategory(body) {
     const response = await fetch(this.host + "/categories/income", {
       method: "POST",
@@ -108,8 +127,6 @@ export class Requests {
     });
 
     const result = await response.json();
-    console.log(result);
-
     if (response.status === 401) {
       const accessToken = UserInfo.getUserInfo().accessToken;
       if (!accessToken) {
