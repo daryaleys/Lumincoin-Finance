@@ -4,6 +4,8 @@ export class Operations {
   constructor(openNewRoute) {
     this.openNewRoute = openNewRoute;
 
+    this.commonErrorElement = document.getElementById("common-error");
+
     this.filterButtons = document.querySelectorAll(".filter-button");
     this.filterButtons.forEach((button) =>
       button.addEventListener("click", this.chooseInterval.bind(this))
@@ -11,6 +13,8 @@ export class Operations {
 
     this.dateFromElement = document.getElementById("startDate");
     this.dateToElement = document.getElementById("endDate");
+    this.dateFromElement.addEventListener("change", this.chooseDate.bind(this));
+    this.dateToElement.addEventListener("change", this.chooseDate.bind(this));
 
     this.tableElement = document.getElementById("tbody");
     this.deleteOperationButton = document.getElementById(
@@ -18,11 +22,11 @@ export class Operations {
     );
 
     $("#startDate").datepicker({
-      format: "mm.dd.yy",
+      format: "dd.mm.yyyy",
       locale: "ru",
     });
     $("#endDate").datepicker({
-      format: "mm.dd.yy",
+      format: "dd.mm.yyyy",
       locale: "ru",
     });
 
@@ -58,14 +62,21 @@ export class Operations {
       this.dateFromElement.removeAttribute("disabled");
       this.dateToElement.removeAttribute("disabled");
     }
+
+    if (filter !== "interval") this.getOperations(filter);
   }
 
-  async getOperations() {
-    const result = await Requests.request(
-      "/operations?period=all",
-      "GET",
-      true
-    );
+  chooseDate() {
+    console.log(this.dateFromElement.value, this.dateToElement.value);
+  }
+
+  async getOperations(period = "today", dateFrom = null, dateTo = null) {
+    const url = "/operations?period=" + period;
+    if (dateFrom && dateTo) {
+      url = url + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo;
+    }
+
+    const result = await Requests.request(url, "GET", true);
 
     if (result.redirect) {
       this.openNewRoute(result.redirect);

@@ -11,6 +11,8 @@ export class OperationAdd {
     this.operationDateElement = document.getElementById("operation-date");
     this.operationCommentElement = document.getElementById("operation-comment");
 
+    this.commonErrorElement = document.getElementById("common-error");
+
     document
       .getElementById("create-operation-button")
       .addEventListener("click", this.createOperation.bind(this));
@@ -28,6 +30,7 @@ export class OperationAdd {
 
   async getCategories(e) {
     const operationType = e.target.value;
+    if (!operationType) return;
 
     const result = await Requests.request(
       "/categories/" + operationType,
@@ -63,15 +66,19 @@ export class OperationAdd {
     });
   }
 
-  async createOperation() {
+  validateForm() {
+    let isValid = true;
+
     if (!this.operationTypeElement.value) {
       this.operationTypeElement.classList.add("is-invalid");
+      isValid = false;
     } else {
       this.operationTypeElement.classList.remove("is-invalid");
     }
 
     if (!this.operationCategoryElement.value) {
       this.operationCategoryElement.classList.add("is-invalid");
+      isValid = false;
     } else {
       this.operationCategoryElement.classList.remove("is-invalid");
     }
@@ -81,42 +88,59 @@ export class OperationAdd {
       this.operationAmountElement.value < 0
     ) {
       this.operationAmountElement.classList.add("is-invalid");
+      isValid = false;
     } else {
       this.operationAmountElement.classList.remove("is-invalid");
     }
 
     if (!this.operationDateElement.value) {
       this.operationDateElement.classList.add("is-invalid");
+      isValid = false;
     } else {
       this.operationDateElement.classList.remove("is-invalid");
     }
 
     if (!this.operationCommentElement.value) {
       this.operationCommentElement.classList.add("is-invalid");
+      isValid = false;
     } else {
       this.operationCommentElement.classList.remove("is-invalid");
     }
 
-    const body = {
-      type: this.operationTypeElement.value,
-      amount: this.operationAmountElement.value,
-      date: this.operationDateElement.value.split(".").reverse().join("-"),
-      comment: this.operationCommentElement.value,
-      category_id: +this.operationCategoryElement.value,
-    };
+    return isValid;
+  }
 
-    const result = await Requests.request("/operations", "POST", true, body);
+  async createOperation() {
+    this.commonErrorElement.style.display = "none";
 
-    if (result.redirect) {
-      this.openNewRoute(result.redirect);
+    if (this.validateForm()) {
+      const body = {
+        type: this.operationTypeElement.value,
+        amount: this.operationAmountElement.value,
+        date: this.operationDateElement.value.split(".").reverse().join("-"),
+        comment: this.operationCommentElement.value,
+        category_id: +this.operationCategoryElement.value,
+      };
+
+      const result = await Requests.request("/operations", "POST", true, body);
+
+      if (result.redirect) {
+        this.openNewRoute(result.redirect);
+      }
+
+      if (result.error) {
+        if (result.message === "This record already exists") {
+          this.commonErrorElement.style.display = "block";
+          this.commonErrorElement.innerText = "Такая операция уже существует";
+          return;
+        }
+
+        return alert(
+          "Возникла ошибка при создании операции. Пожалуйста, обратитесь в поддержку"
+        );
+      }
+
+      this.openNewRoute("/income-and-expenses");
     }
-
-    if (result.error) {
-      return alert(
-        "Возникла ошибка при создании операции. Пожалуйста, обратитесь в поддержку"
-      );
-    }
-
-    this.openNewRoute("/income-and-expenses");
   }
 }

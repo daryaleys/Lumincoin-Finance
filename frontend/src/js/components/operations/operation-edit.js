@@ -11,27 +11,38 @@ export class OperationEdit {
     this.operationDateElement = document.getElementById("operation-date");
     this.operationCommentElement = document.getElementById("operation-comment");
 
-    // this.operationTypeElement.addEventListener(
-    //   "change",
-    //   this.getCategories().bind(this)
-    // );
-
-    let url = new URL(window.location);
-    const operationId = url.searchParams.get("operation");
-    if (!operationId) {
-      return this.openNewRoute("/income-and-expenses");
-    }
-
-    this.getOperation(operationId);
-
-    document
-      .getElementById("edit-operation-button")
-      .addEventListener("click", this.editOperation.bind(this));
+    this.currentOperation = {
+      type: "",
+      amount: 0,
+      date: "",
+      comment: "",
+      category: {
+        id: 0,
+        title: "",
+      },
+    };
 
     $("#operation-date").datepicker({
       format: "dd.mm.yyyy",
       locale: "ru",
     });
+
+    this.operationTypeElement.addEventListener("change", (e) => {
+      this.getCategories(e.target.value);
+      console.log(e.target.value);
+    });
+
+    document
+      .getElementById("edit-operation-button")
+      .addEventListener("click", this.editOperation.bind(this));
+
+    let url = new URL(window.location);
+    this.operationId = url.searchParams.get("operation");
+    if (!this.operationId) {
+      return this.openNewRoute("/income-and-expenses");
+    }
+
+    this.getOperation(this.operationId);
   }
 
   async getOperation(operationId) {
@@ -51,23 +62,19 @@ export class OperationEdit {
       );
     }
 
-    // this.getCategories();
+    Object.keys(this.currentOperation).forEach((field) => {
+      if (field === "category") {
+        this.currentOperation.category.title = result.category;
+      } else {
+        this.currentOperation[field] = result[field];
+      }
+    });
 
-    this.operationTypeElement.value = result.type;
-    // this.operationCategoryElement.value = result.category;
-    this.operationAmountElement.value = result.amount;
-    this.operationDateElement.value = result.date
-      .split("-")
-      .reverse()
-      .join(".");
-    this.operationCommentElement.value = result.comment;
-
-    console.log(result);
+    this.getCategories(result.type);
+    this.showCurrentOperation();
   }
 
-  async getCategories() {
-    const operationType = e.target.value;
-
+  async getCategories(operationType) {
     const result = await Requests.request(
       "/categories/" + operationType,
       "GET",
@@ -84,15 +91,20 @@ export class OperationEdit {
       );
     }
 
+    if (!this.currentOperation.category.id) {
+      const currentCategory = result.find(
+        (category) => category.title === this.currentOperation.category.title
+      );
+      this.currentOperation.category.id = currentCategory.id;
+    }
+
     this.addCategoriesToSelect(result);
   }
 
   addCategoriesToSelect(categories) {
-    const currentOptions =
-      this.operationCategoryElement.querySelectorAll("option");
-    for (let i = 1; i < currentOptions.length; i++) {
-      currentOptions[i].remove();
-    }
+    this.operationCategoryElement
+      .querySelectorAll("option")
+      .forEach((option) => option.remove());
 
     categories.forEach((category) => {
       const optionElement = document.createElement("option");
@@ -102,5 +114,89 @@ export class OperationEdit {
     });
   }
 
-  editOperation() {}
+  showCurrentOperation() {
+    this.operationTypeElement.value = this.currentOperation.type;
+    this.operationCategoryElement.value = this.currentOperation.category.id;
+    this.operationAmountElement.value = this.currentOperation.amount;
+    this.operationDateElement.value = this.currentOperation.date
+      .split("-")
+      .reverse()
+      .join(".");
+    this.operationCommentElement.value = this.currentOperation.comment;
+  }
+
+  validateForm() {
+    let isValid = true;
+
+    if (!this.operationTypeElement.value) {
+      this.operationTypeElement.classList.add("is-invalid");
+      isValid = false;
+    } else {
+      this.operationTypeElement.classList.remove("is-invalid");
+    }
+
+    if (!this.operationCategoryElement.value) {
+      this.operationCategoryElement.classList.add("is-invalid");
+      isValid = false;
+    } else {
+      this.operationCategoryElement.classList.remove("is-invalid");
+    }
+
+    if (
+      !this.operationAmountElement.value ||
+      this.operationAmountElement.value < 0
+    ) {
+      this.operationAmountElement.classList.add("is-invalid");
+      isValid = false;
+    } else {
+      this.operationAmountElement.classList.remove("is-invalid");
+    }
+
+    if (!this.operationDateElement.value) {
+      this.operationDateElement.classList.add("is-invalid");
+      isValid = false;
+    } else {
+      this.operationDateElement.classList.remove("is-invalid");
+    }
+
+    if (!this.operationCommentElement.value) {
+      this.operationCommentElement.classList.add("is-invalid");
+      isValid = false;
+    } else {
+      this.operationCommentElement.classList.remove("is-invalid");
+    }
+
+    return isValid;
+  }
+
+  async editOperation() {
+    if (this.validateForm()) {
+      const body = {
+        type: this.operationTypeElement.value,
+        amount: this.operationAmountElement.value,
+        date: this.operationDateElement.value.split(".").reverse().join("-"),
+        comment: this.operationCommentElement.value,
+        category_id: +this.operationCategoryElement.value,
+      };
+
+      const result = await Requests.request(
+        "/operations/" + this.operationId,
+        "PUT",
+        true,
+        body
+      );
+
+      if (result.redirect) {
+        this.openNewRoute(result.redirect);
+      }
+
+      if (result.error) {
+        return alert(
+          "Возникла ошибка при редактировании операции. Пожалуйста, обратитесь в поддержку"
+        );
+      }
+
+      this.openNewRoute("/income-and-expenses");
+    }
+  }
 }
