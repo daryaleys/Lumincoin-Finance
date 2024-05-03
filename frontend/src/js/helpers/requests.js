@@ -6,11 +6,6 @@ export class Requests {
     "Content-type": "application/json",
     Accept: "application/json",
   };
-  static authHeaders = {
-    "Content-type": "application/json",
-    Accept: "application/json",
-    "x-auth-token": UserInfo.getUserInfo().accessToken,
-  };
 
   static async refresh() {
     const refreshToken = UserInfo.getUserInfo().refreshToken;

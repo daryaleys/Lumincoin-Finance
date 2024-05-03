@@ -1,6 +1,6 @@
 import { Requests } from "../../helpers/requests";
 
-export class Income {
+export class Expenses {
   constructor(openNewRoute) {
     this.openNewRoute = openNewRoute;
 
@@ -16,7 +16,7 @@ export class Income {
   }
 
   async getCategories() {
-    const result = await Requests.request("/categories/income", "GET", true);
+    const result = await Requests.request("/categories/expense", "GET", true);
 
     if (result.redirect) {
       this.openNewRoute(result.redirect);
@@ -76,7 +76,7 @@ export class Income {
       "px-3"
     );
     categoryEditLink.innerText = "Редактировать";
-    categoryEditLink.setAttribute("href", `/income-edit?category=${id}`);
+    categoryEditLink.setAttribute("href", `/expenses-edit?category=${id}`);
 
     const categoryDeleteButton = document.createElement("button");
     categoryDeleteButton.classList.add(
@@ -114,7 +114,7 @@ export class Income {
 
     this.deleteCategoryButton.onclick = async () => {
       const result = await Requests.request(
-        "/categories/income/" + categoryId,
+        "/categories/expense/" + categoryId,
         "DELETE",
         true
       );

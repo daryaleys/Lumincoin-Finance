@@ -5,9 +5,9 @@ import { IncomeExpenseEdit } from "./components/income-expense-edit";
 import { Income } from "./components/income/income";
 import { IncomeCreate } from "./components/income/income-create";
 import { IncomeEdit } from "./components/income/income-edit";
-import { Expenses } from "./components/expenses";
-import { ExpensesCreate } from "./components/expenses-create";
-import { ExpensesEdit } from "./components/expenses-edit";
+import { Expenses } from "./components/expenses/expenses";
+import { ExpensesCreate } from "./components/expenses/expenses-create";
+import { ExpensesEdit } from "./components/expenses/expenses-edit";
 import { Login } from "./components/auth/login";
 import { Register } from "./components/auth/register";
 import { Logout } from "./components/auth/logout";
@@ -58,16 +58,16 @@ export class Router {
       },
       {
         route: "/income",
-        filePathTemplate: "/pages/templates/income.html",
+        filePathTemplate: "/pages/templates/income/income.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new Income();
+          new Income(this.openNewRoute.bind(this));
         },
       },
       {
         route: "/income-create",
-        filePathTemplate: "/pages/templates/income-create.html",
+        filePathTemplate: "/pages/templates/income/income-create.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
@@ -76,7 +76,7 @@ export class Router {
       },
       {
         route: "/income-edit",
-        filePathTemplate: "/pages/templates/income-edit.html",
+        filePathTemplate: "/pages/templates/income/income-edit.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
@@ -85,29 +85,29 @@ export class Router {
       },
       {
         route: "/expenses",
-        filePathTemplate: "/pages/templates/expenses.html",
+        filePathTemplate: "/pages/templates/expenses/expenses.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new Expenses();
+          new Expenses(this.openNewRoute.bind(this));
         },
       },
       {
         route: "/expenses-create",
-        filePathTemplate: "/pages/templates/expenses-create.html",
+        filePathTemplate: "/pages/templates/expenses/expenses-create.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new ExpensesCreate();
+          new ExpensesCreate(this.openNewRoute.bind(this));
         },
       },
       {
         route: "/expenses-edit",
-        filePathTemplate: "/pages/templates/expenses-edit.html",
+        filePathTemplate: "/pages/templates/expenses/expenses-edit.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new ExpensesEdit();
+          new ExpensesEdit(this.openNewRoute.bind(this));
         },
       },
       {

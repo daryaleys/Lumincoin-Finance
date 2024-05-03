@@ -1,30 +1,28 @@
 <div class="vh-100 d-flex flex-column p-5" style="width: calc(100vw - 220px)">
   <h1 class="fw-medium text-primary-emphasis mb-4">
-    Создание категории доходов
+    Редактирование категории расходов
   </h1>
 
   <div class="input-group mb-3" style="width: 400px">
     <input
       type="text"
-      class="form-control text-body-secondary bg-transparent rounded-2"
-      placeholder="Название..."
+      class="form-control bg-transparent rounded-2 text-black"
       id="category-title"
     />
-    <div class="invalid-feedback">Введите название</div>
+    <div class="invalid-feedback">Введите новое название</div>
   </div>
 
   <div class="d-flex align-items-center">
     <button
       class="btn btn-success d-inline-flex align-items-center py-2 px-3"
       type="button"
-      id="income-create-submit"
+      id="expense-edit-submit"
     >
-      Создать
+      Сохранить
     </button>
     <a
-      href="/income"
+      href="/expenses"
       class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
-      type="button"
     >
       Отмена
     </a>
