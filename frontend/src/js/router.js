@@ -1,7 +1,7 @@
 import { Main } from "./components/main";
-import { IncomeAndExpenses } from "./components/income-and-expenses";
-import { IncomeExpenseAdd } from "./components/income-expense-add";
-import { IncomeExpenseEdit } from "./components/income-expense-edit";
+import { Operations } from "./components/operations/operations";
+import { OperationAdd } from "./components/operations/operation-add";
+import { OperationEdit } from "./components/operations/operation-edit";
 import { Income } from "./components/income/income";
 import { IncomeCreate } from "./components/income/income-create";
 import { IncomeEdit } from "./components/income/income-edit";
@@ -31,29 +31,29 @@ export class Router {
       },
       {
         route: "/income-and-expenses",
-        filePathTemplate: "/pages/templates/income-and-expenses.html",
+        filePathTemplate: "/pages/templates/operations/operations.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new IncomeAndExpenses();
+          new Operations(this.openNewRoute.bind(this));
         },
       },
       {
         route: "/income-expense-add",
-        filePathTemplate: "/pages/templates/income-expense-add.html",
+        filePathTemplate: "/pages/templates/operations/add-operation.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new IncomeExpenseAdd();
+          new OperationAdd(this.openNewRoute.bind(this));
         },
       },
       {
         route: "/income-expense-edit",
-        filePathTemplate: "/pages/templates/income-expense-edit.html",
+        filePathTemplate: "/pages/templates/operations/edit-operation.html",
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new IncomeExpenseEdit();
+          new OperationEdit(this.openNewRoute.bind(this));
         },
       },
       {
