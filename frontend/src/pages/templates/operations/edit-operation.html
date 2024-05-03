@@ -5,8 +5,8 @@
 
   <div class="input-group mb-3" style="width: 400px">
     <select
-      class="form-select text-body-secondary"
-      id="floatingSelect"
+      class="form-select text-black rounded-2"
+      id="operation-type"
       style="background: none"
     >
       <option selected>Тип...</option>
@@ -17,8 +17,8 @@
 
   <div class="input-group mb-3" style="width: 400px">
     <select
-      class="form-select text-body-secondary"
-      id="floatingSelect"
+      class="form-select text-black rounded-2"
+      id="operation-category"
       style="background: none"
     >
       <option selected>Категория...</option>
@@ -30,7 +30,8 @@
   <div class="input-group mb-3 bg-transparent" style="width: 400px">
     <input
       type="number"
-      class="form-control text-body-secondary bg-transparent"
+      id="operation-amount"
+      class="form-control text-black bg-transparent rounded-2"
       placeholder="Сумма в $..."
     />
   </div>
@@ -38,16 +39,17 @@
   <div class="input-group mb-3 bg-transparent" style="width: 400px">
     <input
       type="text"
-      class="form-control text-body-secondary bg-transparent"
+      class="form-control text-black bg-transparent rounded-2"
       placeholder="Дата..."
-      data-provide="datepicker"
+      id="operation-date"
     />
   </div>
 
   <div class="input-group mb-3 bg-transparent" style="width: 400px">
     <input
       type="text"
-      class="form-control text-body-secondary bg-transparent"
+      id="operation-comment"
+      class="form-control text-black bg-transparent rounded-2"
       placeholder="Комментарий..."
     />
   </div>
@@ -56,13 +58,13 @@
     <button
       class="btn btn-success d-inline-flex align-items-center py-2 px-3"
       type="button"
+      id="edit-operation-button"
     >
       Сохранить
     </button>
     <a
       href="/income-and-expenses"
       class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
-      type="button"
     >
       Отмена
     </a>
