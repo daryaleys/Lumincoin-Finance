@@ -24,7 +24,7 @@
     <div style="width: 100px">
       <button
         type="button"
-        class="btn btn-secondary w-100 fw-semibold"
+        class="btn btn-secondary w-100 fw-semibold filter-button"
         data-filter="today"
       >
         Сегодня
@@ -33,7 +33,7 @@
     <div style="width: 100px">
       <button
         type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold"
+        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
         data-filter="week"
       >
         Неделя
@@ -42,8 +42,8 @@
     <div style="width: 100px">
       <button
         type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold"
-        data-filter="week"
+        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+        data-filter="month"
       >
         Месяц
       </button>
@@ -51,8 +51,8 @@
     <div style="width: 100px">
       <button
         type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold"
-        data-filter="week"
+        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+        data-filter="year"
       >
         Год
       </button>
@@ -60,8 +60,8 @@
     <div style="width: 100px">
       <button
         type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold"
-        data-filter="week"
+        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+        data-filter="all"
       >
         Все
       </button>
@@ -69,8 +69,8 @@
     <div style="width: 100px">
       <button
         type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold"
-        data-filter="week"
+        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+        data-filter="interval"
       >
         Интервал
       </button>
@@ -79,18 +79,20 @@
 
     <input
       id="startDate"
-      class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold"
+      class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold shadow-none date-interval"
+      style="caret-color: transparent"
       type="text"
-      data-provide="datepicker"
       placeholder="Дата"
+      disabled
     />
     <span class="fw-semibold">по</span>
     <input
       id="endDate"
-      class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold"
+      class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold shadow-none date-interval"
+      style="caret-color: transparent"
       type="text"
-      data-provide="datepicker"
       placeholder="Дата"
+      disabled
     />
   </div>
 

@@ -91,12 +91,18 @@ export class OperationAdd {
       this.operationDateElement.classList.remove("is-invalid");
     }
 
+    if (!this.operationCommentElement.value) {
+      this.operationCommentElement.classList.add("is-invalid");
+    } else {
+      this.operationCommentElement.classList.remove("is-invalid");
+    }
+
     const body = {
       type: this.operationTypeElement.value,
       amount: this.operationAmountElement.value,
       date: this.operationDateElement.value.split(".").reverse().join("-"),
       comment: this.operationCommentElement.value,
-      category_id: this.operationCategoryElement.value,
+      category_id: +this.operationCategoryElement.value,
     };
 
     const result = await Requests.request("/operations", "POST", true, body);

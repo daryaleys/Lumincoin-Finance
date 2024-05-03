@@ -4,9 +4,24 @@ export class Operations {
   constructor(openNewRoute) {
     this.openNewRoute = openNewRoute;
 
+    this.filterButtons = document.querySelectorAll(".filter-button");
+    this.filterButtons.forEach((button) =>
+      button.addEventListener("click", this.chooseInterval.bind(this))
+    );
+
+    this.dateFromElement = document.getElementById("startDate");
+    this.dateToElement = document.getElementById("endDate");
+
     this.tableElement = document.getElementById("tbody");
+    this.deleteOperationButton = document.getElementById(
+      "delete-operation-button"
+    );
 
     $("#startDate").datepicker({
+      format: "mm.dd.yy",
+      locale: "ru",
+    });
+    $("#endDate").datepicker({
       format: "mm.dd.yy",
       locale: "ru",
     });
@@ -14,8 +29,43 @@ export class Operations {
     this.getOperations().then();
   }
 
+  chooseInterval(e) {
+    this.dateFromElement.setAttribute("disabled", "disabled");
+    this.dateFromElement.value = "";
+    this.dateToElement.setAttribute("disabled", "disabled");
+    this.dateToElement.value = "";
+
+    this.filterButtons.forEach((button) => {
+      button.classList.add(
+        "border",
+        "border-secondary",
+        "text-secondary",
+        "btn-tertiary"
+      );
+      button.classList.remove("btn-secondary");
+    });
+
+    e.target.classList.remove(
+      "border",
+      "border-secondary",
+      "text-secondary",
+      "btn-tertiary"
+    );
+    e.target.classList.add("btn-secondary");
+
+    const filter = e.target.dataset.filter;
+    if (filter === "interval") {
+      this.dateFromElement.removeAttribute("disabled");
+      this.dateToElement.removeAttribute("disabled");
+    }
+  }
+
   async getOperations() {
-    const result = await Requests.request("/operations", "GET", true);
+    const result = await Requests.request(
+      "/operations?period=all",
+      "GET",
+      true
+    );
 
     if (result.redirect) {
       this.openNewRoute(result.redirect);
@@ -31,6 +81,8 @@ export class Operations {
   }
 
   showOperations(operations) {
+    this.tableElement.querySelectorAll("tr").forEach((tr) => tr.remove());
+
     operations.forEach((operation, index) => {
       const trElement = document.createElement("tr");
       trElement.setAttribute("data-operation", operation.id);
@@ -51,7 +103,7 @@ export class Operations {
 
       const tdOperationCategory = document.createElement("td");
       tdOperationCategory.classList.add("text-center");
-      //   tdOperationCategory.innerText = operation.category;
+      tdOperationCategory.innerText = operation.category;
 
       const tdAmountElement = document.createElement("td");
       tdAmountElement.classList.add("text-center");
@@ -76,6 +128,10 @@ export class Operations {
 
       const deleteIconImage = document.createElement("img");
       deleteIconImage.setAttribute("src", "../../../assets/delete-action.svg");
+      deleteIconImage.addEventListener(
+        "click",
+        this.deleteOperation.bind(this)
+      );
 
       deleteIconElement.appendChild(deleteIconImage);
 
@@ -104,7 +160,30 @@ export class Operations {
 
       this.tableElement.appendChild(trElement);
     });
+  }
 
-    console.log(operations);
+  deleteOperation(e) {
+    let operationId = -1;
+    console.log(e.target);
+    const trElement = e.target.parentElement.parentElement.parentElement;
+    if (trElement && trElement.dataset.operation) {
+      operationId = trElement.dataset.operation;
+    }
+
+    this.deleteOperationButton.onclick = async () => {
+      const result = await Requests.request(
+        "/operations/" + operationId,
+        "DELETE",
+        true
+      );
+
+      if (result.error) {
+        return alert(
+          "Возникла ошибка при удалении операции. Пожалуйста, обратитесь в поддержку"
+        );
+      }
+
+      await this.getOperations();
+    };
   }
 }
