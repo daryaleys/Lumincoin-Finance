@@ -250,7 +250,8 @@ export class Router {
   }
 
   async showUserInfo() {
-    const balanceResult = await Requests.getBalance();
+    const balanceResult = await Requests.request("/balance", "GET", true);
+
     if (balanceResult.redirect) {
       return await this.openNewRoute(balanceResult.redirect);
     }

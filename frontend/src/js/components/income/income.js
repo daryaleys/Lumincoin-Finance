@@ -14,7 +14,8 @@ export class Income {
   }
 
   async getCategories() {
-    const result = await Requests.getCategories();
+    const result = await Requests.request("/categories/income", "GET", true);
+
     if (result.redirect) {
       this.openNewRoute(result.redirect);
     }
@@ -110,7 +111,11 @@ export class Income {
     }
 
     this.deleteCategoryButton.onclick = async () => {
-      const result = await Requests.deleteCategory(categoryId);
+      const result = await Requests.request(
+        "/categories/income/" + categoryId,
+        "DELETE",
+        true
+      );
 
       if (result.error) {
         return alert(

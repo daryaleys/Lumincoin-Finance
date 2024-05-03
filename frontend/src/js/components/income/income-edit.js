@@ -20,7 +20,12 @@ export class IncomeEdit {
   }
 
   async getCategory(categoryId) {
-    const result = await Requests.getCategory(categoryId);
+    const result = await Requests.request(
+      "/categories/income/" + categoryId,
+      "GET",
+      true
+    );
+
     if (result.redirect) {
       this.openNewRoute(result.redirect);
     }
@@ -47,7 +52,12 @@ export class IncomeEdit {
 
     const body = { title: this.categoryTitleElement.value };
 
-    const result = await Requests.editCategory(body, this.currentCategory.id);
+    const result = await Requests.request(
+      "/categories/income/" + this.currentCategory.id,
+      "PUT",
+      true,
+      body
+    );
 
     if (result.redirect) {
       this.openNewRoute(result.redirect);

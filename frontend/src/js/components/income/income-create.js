@@ -23,7 +23,13 @@ export class IncomeCreate {
       title: this.categoryTitleElement.value,
     };
 
-    const result = await Requests.createCategory(body);
+    const result = await Requests.request(
+      "/categories/income",
+      "POST",
+      true,
+      body
+    );
+
     if (result.redirect) {
       this.openNewRoute(result.redirect);
     }
