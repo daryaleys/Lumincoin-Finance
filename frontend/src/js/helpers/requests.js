@@ -171,6 +171,34 @@ export class Requests {
     return result;
   }
 
+  static async editCategory(body, categoryId) {
+    const response = await fetch(
+      this.host + "/categories/income/" + categoryId,
+      {
+        method: "PUT",
+        headers: this.authHeaders,
+        body: JSON.stringify(body),
+      }
+    );
+
+    const result = await response.json();
+    if (response.status === 401) {
+      const accessToken = UserInfo.getUserInfo().accessToken;
+      if (!accessToken) {
+        result.redirect = "/login";
+        return result;
+      } else {
+        const refreshResult = await this.refresh();
+        if (refreshResult.redirect) {
+          return refreshResult;
+        }
+        return await this.editCategory(body);
+      }
+    }
+
+    return result;
+  }
+
   static async deleteCategory(categoryId) {
     const response = await fetch(
       this.host + "/categories/income/" + categoryId,
