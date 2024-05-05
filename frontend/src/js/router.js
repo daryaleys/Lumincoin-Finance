@@ -26,7 +26,7 @@ export class Router {
         useLayout: "/pages/layout.html",
         needAuth: true,
         load: () => {
-          new Main();
+          new Main(this.openNewRoute.bind(this));
         },
       },
       {

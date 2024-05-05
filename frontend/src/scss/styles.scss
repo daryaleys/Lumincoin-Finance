@@ -66,4 +66,8 @@ table.table tr td {
 #endDate {
   width: 85px;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }

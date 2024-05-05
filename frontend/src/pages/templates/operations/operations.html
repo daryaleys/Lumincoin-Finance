@@ -1,152 +1,152 @@
 <div class="vh-100 d-flex flex-column p-5" style="width: calc(100vw - 220px)">
-  <h1 class="fw-medium text-primary-emphasis mb-4">Доходы и расходы</h1>
+    <h1 class="fw-medium text-primary-emphasis mb-4">Доходы и расходы</h1>
 
-  <div class="d-flex align-items-center mb-4">
-    <a
-      href="/income-expense-add"
-      class="btn btn-success d-inline-flex align-items-center py-2 px-3"
-      id="income-create"
-      type="button"
-    >
-      Создать доход
-    </a>
-    <a
-      href="/income-expense-add"
-      class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
-      id="expenses-create"
-      type="button"
-    >
-      Создать расход
-    </a>
-  </div>
+    <div class="d-flex align-items-center mb-4">
+        <a
+                href="/income-expense-add"
+                class="btn btn-success d-inline-flex align-items-center py-2 px-3"
+                id="income-create"
+                type="button"
+        >
+            Создать доход
+        </a>
+        <a
+                href="/income-expense-add"
+                class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
+                id="expenses-create"
+                type="button"
+        >
+            Создать расход
+        </a>
+    </div>
 
-  <div class="d-flex align-items-center column-gap-3 mb-4">
-    <div style="width: 100px">
-      <button
-        type="button"
-        class="btn btn-secondary w-100 fw-semibold filter-button"
-        data-filter="today"
-      >
-        Сегодня
-      </button>
-    </div>
-    <div style="width: 100px">
-      <button
-        type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
-        data-filter="week"
-      >
-        Неделя
-      </button>
-    </div>
-    <div style="width: 100px">
-      <button
-        type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
-        data-filter="month"
-      >
-        Месяц
-      </button>
-    </div>
-    <div style="width: 100px">
-      <button
-        type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
-        data-filter="year"
-      >
-        Год
-      </button>
-    </div>
-    <div style="width: 100px">
-      <button
-        type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
-        data-filter="all"
-      >
-        Все
-      </button>
-    </div>
-    <div style="width: 100px">
-      <button
-        type="button"
-        class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
-        data-filter="interval"
-      >
-        Интервал
-      </button>
-    </div>
-    <span class="fw-semibold">с</span>
+    <div class="d-flex align-items-center column-gap-3 mb-3">
+        <div style="width: 100px">
+            <button
+                    type="button"
+                    class="btn btn-secondary w-100 fw-semibold filter-button"
+                    data-filter="today"
+            >
+                Сегодня
+            </button>
+        </div>
+        <div style="width: 100px">
+            <button
+                    type="button"
+                    class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+                    data-filter="week"
+            >
+                Неделя
+            </button>
+        </div>
+        <div style="width: 100px">
+            <button
+                    type="button"
+                    class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+                    data-filter="month"
+            >
+                Месяц
+            </button>
+        </div>
+        <div style="width: 100px">
+            <button
+                    type="button"
+                    class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+                    data-filter="year"
+            >
+                Год
+            </button>
+        </div>
+        <div style="width: 100px">
+            <button
+                    type="button"
+                    class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+                    data-filter="all"
+            >
+                Все
+            </button>
+        </div>
+        <div style="width: 100px">
+            <button
+                    type="button"
+                    class="btn btn-tertiary w-100 border border-secondary text-secondary fw-semibold filter-button"
+                    data-filter="interval"
+            >
+                Интервал
+            </button>
+        </div>
 
-    <input
-      id="startDate"
-      class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold shadow-none date-interval"
-      style="caret-color: transparent"
-      type="text"
-      placeholder="Дата"
-      disabled
-    />
-    <span class="fw-semibold">по</span>
-    <input
-      id="endDate"
-      class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold shadow-none date-interval"
-      style="caret-color: transparent"
-      type="text"
-      placeholder="Дата"
-      disabled
-    />
-  </div>
+        <span class="fw-semibold">с</span>
+        <input
+                id="startDate"
+                class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold shadow-none date-interval"
+                style="caret-color: transparent"
+                type="text"
+                placeholder="Дата"
+                disabled
+        />
+        <span class="fw-semibold">по</span>
+        <input
+                id="endDate"
+                class="form-control border-0 outline-0 bg-transparent p-0 text-decoration-underline text-secondary fw-semibold shadow-none date-interval"
+                style="caret-color: transparent"
+                type="text"
+                placeholder="Дата"
+                disabled
+        />
+    </div>
 
-  <div class="error invalid-feedback text-center mb-3" id="common-error"></div>
+    <div class="error invalid-feedback mb-3" id="common-error"></div>
 
-  <table class="table align-middle">
-    <thead>
-      <tr class="table-tertiary border-top">
-        <th scope="col" class="text-primary-emphasis text-center">
-          № операции
-        </th>
-        <th scope="col" class="text-primary-emphasis text-center">Тип</th>
-        <th scope="col" class="text-primary-emphasis text-center">Категория</th>
-        <th scope="col" class="text-primary-emphasis text-center">Сумма</th>
-        <th scope="col" class="text-primary-emphasis text-center">Дата</th>
-        <th scope="col" class="text-primary-emphasis text-center">
-          Комментарий
-        </th>
-        <th scope="col" class="text-primary-emphasis"></th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
+    <table class="table align-middle">
+        <thead>
+        <tr class="table-tertiary border-top">
+            <th scope="col" class="text-primary-emphasis text-center">
+                № операции
+            </th>
+            <th scope="col" class="text-primary-emphasis text-center">Тип</th>
+            <th scope="col" class="text-primary-emphasis text-center">Категория</th>
+            <th scope="col" class="text-primary-emphasis text-center">Сумма</th>
+            <th scope="col" class="text-primary-emphasis text-center">Дата</th>
+            <th scope="col" class="text-primary-emphasis text-center">
+                Комментарий
+            </th>
+            <th scope="col" class="text-primary-emphasis"></th>
+        </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
 </div>
 
 <div class="modal fade" id="modal" tabindex="-1">
-  <div
-    class="modal-dialog my-0 vh-100 d-flex align-items-center justify-content-center"
-  >
-    <div class="modal-content">
-      <div class="modal-body p-4">
-        <h5 class="modal-title text-center text-primary-emphasis mb-3">
-          Вы действительно хотите удалить операцию?
-        </h5>
-        <div class="d-flex justify-content-center align-items-center">
-          <button
-            class="btn btn-success d-inline-flex align-items-center py-2 px-3"
-            type="button"
-            id="delete-operation-button"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          >
-            Да, удалить
-          </button>
-          <button
-            class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
-            type="button"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          >
-            Не удалять
-          </button>
+    <div
+            class="modal-dialog my-0 vh-100 d-flex align-items-center justify-content-center"
+    >
+        <div class="modal-content">
+            <div class="modal-body p-4">
+                <h5 class="modal-title text-center text-primary-emphasis mb-3">
+                    Вы действительно хотите удалить операцию?
+                </h5>
+                <div class="d-flex justify-content-center align-items-center">
+                    <button
+                            class="btn btn-success d-inline-flex align-items-center py-2 px-3"
+                            type="button"
+                            id="delete-operation-button"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        Да, удалить
+                    </button>
+                    <button
+                            class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
+                            type="button"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        Не удалять
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
