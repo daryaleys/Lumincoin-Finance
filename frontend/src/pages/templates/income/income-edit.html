@@ -6,22 +6,23 @@
   <div class="input-group mb-3" style="width: 400px">
     <input
       type="text"
-      class="form-control text-body-secondary bg-transparent"
-      placeholder="Название..."
+      class="form-control bg-transparent text-black rounded-2"
+      id="category-title"
     />
+    <div class="invalid-feedback">Введите новое название</div>
   </div>
 
   <div class="d-flex align-items-center">
     <button
       class="btn btn-success d-inline-flex align-items-center py-2 px-3"
       type="button"
+      id="income-edit-submit"
     >
       Сохранить
     </button>
     <a
       href="/income"
       class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
-      type="button"
     >
       Отмена
     </a>

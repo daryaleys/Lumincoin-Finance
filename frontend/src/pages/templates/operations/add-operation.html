@@ -1,0 +1,79 @@
+<div class="vh-100 d-flex flex-column p-5" style="width: calc(100vw - 220px)">
+  <h1 class="fw-medium text-primary-emphasis mb-4">Создание дохода/расхода</h1>
+
+  <div class="input-group mb-3" style="width: 400px">
+    <select
+      class="form-select text-body-secondary rounded-2"
+      id="operation-type"
+      style="background: none"
+    >
+      <option selected value="">Тип...</option>
+      <option value="income">Доход</option>
+      <option value="expense">Расход</option>
+    </select>
+    <div class="invalid-feedback">Выберите тип операции</div>
+  </div>
+
+  <div class="input-group mb-3" style="width: 400px">
+    <select
+      class="form-select text-body-secondary rounded-2"
+      id="operation-category"
+      style="background: none"
+    >
+      <option selected value="">Категория...</option>
+    </select>
+    <div class="invalid-feedback">Выберите категорию</div>
+  </div>
+
+  <div class="input-group mb-3 bg-transparent" style="width: 400px">
+    <input
+      type="number"
+      class="form-control text-body-secondary bg-transparent rounded-2"
+      placeholder="Сумма в $..."
+      id="operation-amount"
+    />
+    <div class="invalid-feedback">Введите корректную сумму</div>
+  </div>
+
+  <div class="input-group mb-3 bg-transparent" style="width: 400px">
+    <input
+      type="text"
+      class="form-control text-body-secondary bg-transparent rounded-2"
+      placeholder="Дата..."
+      id="operation-date"
+    />
+    <div class="invalid-feedback">Выберите дату</div>
+  </div>
+
+  <div class="input-group mb-3 bg-transparent" style="width: 400px">
+    <input
+      type="text"
+      class="form-control text-body-secondary bg-transparent rounded-2"
+      id="operation-comment"
+      placeholder="Комментарий..."
+    />
+    <div class="invalid-feedback">Введите комментарий</div>
+  </div>
+
+  <div
+    class="error invalid-feedback text-center mb-3"
+    id="common-error"
+    style="width: 400px"
+  ></div>
+
+  <div class="d-flex align-items-center">
+    <button
+      class="btn btn-success d-inline-flex align-items-center py-2 px-3"
+      type="button"
+      id="create-operation-button"
+    >
+      Создать
+    </button>
+    <a
+      href="/income-and-expenses"
+      class="btn btn-danger d-inline-flex align-items-center py-2 px-3 ms-2"
+    >
+      Отмена
+    </a>
+  </div>
+</div>
