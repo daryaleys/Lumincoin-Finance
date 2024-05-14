@@ -13,10 +13,20 @@ import { Register } from "./components/auth/register";
 import { Logout } from "./components/auth/logout";
 import { UserInfo } from "./helpers/userInfo";
 import { Requests } from "./helpers/requests";
+import { RouteType } from "./types/route.type";
+import { UserInfoType } from "./types/user-info.type";
 
 export class Router {
+  readonly contentPageElement: HTMLElement | null =
+    document.getElementById("content");
+  readonly balanceElement: HTMLElement | null =
+    document.getElementById("balance");
+  readonly userNameElement: HTMLElement | null =
+    document.getElementById("layout-username");
+
+  routes: RouteType[] = [];
+
   constructor() {
-    this.contentPageElement = document.getElementById("content");
     this.initEvents();
 
     this.routes = [
@@ -135,68 +145,82 @@ export class Router {
     ];
   }
 
-  initEvents() {
+  private initEvents(): void {
     window.addEventListener("DOMContentLoaded", this.activateRoute.bind(this));
     window.addEventListener("popstate", this.activateRoute.bind(this));
     document.addEventListener("click", this.linksHandle.bind(this));
   }
 
-  async openNewRoute(url) {
+  public async openNewRoute(url: string): Promise<void> {
     history.pushState({}, "", url);
     await this.activateRoute();
   }
 
-  async linksHandle(e) {
-    let element = null;
-    if (e.target.nodeName === "A") {
-      element = e.target;
-    } else {
-      element = e.target.parentNode;
-    }
-    if (!element || !element.href || element.href === "/#") return;
+  private async linksHandle(e: Event): Promise<void> {
+    let element: EventTarget | null = e.target;
+    if (element) {
+      if ((element as HTMLElement).nodeName !== "A") {
+        element = (element as HTMLElement).parentNode;
+      }
 
-    e.preventDefault();
-    const newRoute = element.href.replace(window.location.origin, "");
-    await this.openNewRoute(newRoute);
+      if (
+        !(element as HTMLLinkElement).href ||
+        (element as HTMLLinkElement).href === "/#"
+      )
+        return;
+
+      e.preventDefault();
+      const newRoute: string = (element as HTMLLinkElement).href.replace(
+        window.location.origin,
+        ""
+      );
+      await this.openNewRoute(newRoute);
+    }
   }
 
-  async activateRoute() {
-    const url = window.location.pathname;
-    const currentUrl = this.routes.find((item) => item.route === url);
-    const isAuthed = UserInfo.getUserInfo().accessToken;
+  private async activateRoute(): Promise<void> {
+    const url: string = window.location.pathname;
+    const currentUrl: RouteType | undefined = this.routes.find(
+      (item) => item.route === url
+    );
+    const isAuthed: string | null = UserInfo.getUserInfo().accessToken;
 
     if (currentUrl) {
       if (currentUrl.filePathTemplate) {
-        let contentBlock = this.contentPageElement;
+        let contentBlock: HTMLElement | null = this.contentPageElement;
 
         if (currentUrl.useLayout) {
           if (isAuthed) {
-            this.contentPageElement.innerHTML = await fetch(
-              currentUrl.useLayout
-            ).then((response) => response.text());
+            if (this.contentPageElement) {
+              this.contentPageElement.innerHTML = await fetch(
+                currentUrl.useLayout
+              ).then((response) => response.text());
+            }
+
             contentBlock = document.getElementById("layout-content");
             this.activateSidebarButtons(currentUrl);
             await this.showUserInfo();
           } else {
-            return await this.openNewRoute("/login");
+            await this.openNewRoute("/login");
+            return;
           }
         }
 
-        contentBlock.innerHTML = await fetch(currentUrl.filePathTemplate).then(
-          (response) => response.text()
-        );
+        if (contentBlock) {
+          contentBlock.innerHTML = await fetch(
+            currentUrl.filePathTemplate
+          ).then((response) => response.text());
+        }
       }
 
-      if (currentUrl.load) {
-        currentUrl.load();
-      }
+      currentUrl.load();
     } else {
-      console.log(":(");
+      this.openNewRoute("/");
     }
   }
 
-  activateSidebarButtons(currentUrl) {
-    let route = currentUrl.route;
+  private activateSidebarButtons(currentUrl: RouteType): void {
+    let route: string = currentUrl.route;
 
     if (route === "/income-create" || route === "/income-edit") {
       route = "/income";
@@ -209,47 +233,53 @@ export class Router {
       route = "/income-and-expenses";
     }
 
-    const menuCollapsibleWrapper = document.querySelector(
+    const menuCollapsibleWrapper: HTMLElement | null = document.querySelector(
       "#collapsible-menu-wrapper"
     );
-    const menuCollapsible = document.querySelector("#collapsible-menu");
-    const menuCollapsibleButton = document.querySelector(".nav-link-button");
+    const menuCollapsible: HTMLElement | null =
+      document.querySelector("#collapsible-menu");
+    const menuCollapsibleButton: HTMLElement | null =
+      document.querySelector(".nav-link-button");
     const toggleMenu = () => {
-      menuCollapsibleButton.classList.toggle("expanded");
-      menuCollapsible.classList.toggle("show");
+      if (menuCollapsibleButton && menuCollapsible) {
+        menuCollapsibleButton.classList.toggle("expanded");
+        menuCollapsible.classList.toggle("show");
+      }
     };
-    menuCollapsibleButton.addEventListener("click", toggleMenu);
+    menuCollapsibleButton?.addEventListener("click", toggleMenu);
 
     document.querySelectorAll(".sidebar .nav-link-item").forEach((item) => {
-      const href = item.getAttribute("href");
+      const href: string | null = item.getAttribute("href");
 
-      if (route === href) {
-        item.classList.add("active");
-        item.classList.remove("link-dark");
-        if (item.classList.contains("collapsible")) {
-          menuCollapsibleWrapper.classList.add("border", "border-primary");
-          menuCollapsibleButton.classList.add("active", "rounded-0");
-          menuCollapsibleButton.classList.remove("link-dark");
-          if (!menuCollapsibleButton.classList.contains("expanded")) {
-            toggleMenu();
+      if (href && menuCollapsibleWrapper && menuCollapsibleButton) {
+        if (route === href) {
+          item.classList.add("active");
+          item.classList.remove("link-dark");
+          if (item.classList.contains("collapsible")) {
+            menuCollapsibleWrapper.classList.add("border", "border-primary");
+            menuCollapsibleButton.classList.add("active", "rounded-0");
+            menuCollapsibleButton.classList.remove("link-dark");
+            if (!menuCollapsibleButton.classList.contains("expanded")) {
+              toggleMenu();
+            }
           }
-        }
-      } else {
-        item.classList.remove("active");
-        item.classList.add("link-dark");
-        if (!item.classList.contains("collapsible")) {
-          menuCollapsibleWrapper.classList.remove("border", "border-primary");
-          menuCollapsibleButton.classList.remove("rounded-0", "active");
-          menuCollapsibleButton.classList.add("link-dark");
-          if (menuCollapsibleButton.classList.contains("expanded")) {
-            toggleMenu();
+        } else {
+          item.classList.remove("active");
+          item.classList.add("link-dark");
+          if (!item.classList.contains("collapsible")) {
+            menuCollapsibleWrapper.classList.remove("border", "border-primary");
+            menuCollapsibleButton.classList.remove("rounded-0", "active");
+            menuCollapsibleButton.classList.add("link-dark");
+            if (menuCollapsibleButton.classList.contains("expanded")) {
+              toggleMenu();
+            }
           }
         }
       }
     });
   }
 
-  async showUserInfo() {
+  private async showUserInfo(): Promise<void> {
     const balanceResult = await Requests.request("/balance", "GET", true);
 
     if (balanceResult.redirect) {
@@ -261,15 +291,17 @@ export class Router {
       );
     }
 
-    this.balanceElement = document.getElementById("balance");
     if (this.balanceElement) {
       this.balanceElement.innerText = balanceResult.balance.toString() + "$";
     }
 
-    this.userNameElement = document.getElementById("layout-username");
-    const userInfo = JSON.parse(UserInfo.getUserInfo().userInfo);
-    if (this.userNameElement && userInfo) {
-      this.userNameElement.innerText = userInfo.name + " " + userInfo.lastName;
+    const userInfoString: string | null = UserInfo.getUserInfo().userInfo;
+    if (userInfoString) {
+      const userInfo: UserInfoType = JSON.parse(userInfoString);
+      if (this.userNameElement && userInfo) {
+        this.userNameElement.innerText =
+          userInfo.name + " " + userInfo.lastName;
+      }
     }
   }
 }
