@@ -1,4 +1,4 @@
-import { Requests } from "../../helpers/requests";
+import { Requests } from "../../helpers/requests.ts";
 
 export class Expenses {
   constructor(openNewRoute) {

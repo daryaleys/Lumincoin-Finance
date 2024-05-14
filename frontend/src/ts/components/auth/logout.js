@@ -1,5 +1,5 @@
-import { UserInfo } from "../../helpers/userInfo";
-import { Requests } from "../../helpers/requests";
+import { UserInfo } from "../../helpers/userInfo.ts";
+import { Requests } from "../../helpers/requests.ts";
 
 export class Logout {
   constructor(openNewRoute) {
