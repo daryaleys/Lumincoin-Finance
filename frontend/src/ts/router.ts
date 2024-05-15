@@ -1,7 +1,7 @@
 import { Main } from "./components/main.ts";
-import { Operations } from "./components/operations/operations";
-import { OperationAdd } from "./components/operations/operation-add";
-import { OperationEdit } from "./components/operations/operation-edit";
+import { Operations } from "./components/operations/operations.ts";
+import { OperationAdd } from "./components/operations/operation-add.ts";
+import { OperationEdit } from "./components/operations/operation-edit.ts";
 import { Income } from "./components/income/income";
 import { IncomeCreate } from "./components/income/income-create";
 import { IncomeEdit } from "./components/income/income-edit";

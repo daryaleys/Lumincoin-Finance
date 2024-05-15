@@ -46,7 +46,7 @@ export class Requests {
 		};
 
 		if (body) {
-			params.body = JSON.stringify(body);
+			params.body = body;
 		}
 
 		const response: Response = await fetch(this.host + url, params);

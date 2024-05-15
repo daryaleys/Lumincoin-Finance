@@ -2,6 +2,7 @@ import Chart, { ChartItem } from "chart.js/auto";
 import { Requests } from "../helpers/requests.ts";
 import { OpenNewRouteType } from "../types/open-route.type.ts";
 import { OperationChartDataType, OperationsByCategoriesType, OperationType } from "../types/operations.type.ts";
+import { CommonResultType } from "../types/requests.type.ts";
 
 export class Main {
 	private openNewRoute: OpenNewRouteType;
@@ -98,18 +99,18 @@ export class Main {
 			url = url + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo;
 		}
 
-		const result = await Requests.request(url, "GET", true);
+		const result: CommonResultType | OperationType[] = await Requests.request(url, "GET", true);
 
-		if (result.redirect) {
-			this.openNewRoute(result.redirect);
+		if ((result as CommonResultType).redirect) {
+			this.openNewRoute((result as CommonResultType).redirect as string);
 		}
 
-		if (result.error) {
+		if ((result as CommonResultType).error) {
 			alert("Возникла ошибка при запросе операций. Пожалуйста, обратитесь в поддержку");
 			return;
 		}
 
-		this.createData(result);
+		this.createData(result as OperationType[]);
 	}
 
 	private createData(operations: OperationType[]): void {
